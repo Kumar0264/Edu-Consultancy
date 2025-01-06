@@ -1,6 +1,6 @@
 package com.pol.user_service.controller;
 
-import com.pol.user_service.auth.model.User;
+
 import com.pol.user_service.dto.user.UserDetailsDTO;
 import com.pol.user_service.service.ProfileService;
 import org.springframework.http.ResponseEntity;

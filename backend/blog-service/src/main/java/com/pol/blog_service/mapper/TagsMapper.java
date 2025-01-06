@@ -5,12 +5,12 @@ import com.pol.blog_service.dto.tags.TagResponseDTO;
 import com.pol.blog_service.dto.tags.TagSummaryDTO;
 import com.pol.blog_service.entity.Tags;
 
-import java.util.stream.Collectors;
+
 
 public class TagsMapper {
     public static Tags toEntity(TagRequestDTO tagRequestDTO){
         return Tags.builder()
-                .tagName(tagRequestDTO.getTagName())
+                .tagName(tagRequestDTO.getTagname())
                 .build();
     }
 

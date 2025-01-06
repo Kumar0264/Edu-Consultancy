@@ -6,7 +6,7 @@ import com.pol.user_service.auth.repository.RefreshTokenRepository;
 import com.pol.user_service.auth.repository.UserRepository;
 import com.pol.user_service.exception.customExceptions.RefreshTokenExpiredException;
 import com.pol.user_service.exception.customExceptions.RefreshTokenNotFound;
-import lombok.RequiredArgsConstructor;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -19,13 +19,15 @@ public class RefreshTokenService {
 
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final GenerateCookies generateCookies;
 
     @Value("${jwt.refresh-expiration}")
     private long refreshTokenExpiration;
 
-    public RefreshTokenService(UserRepository userRepository, RefreshTokenRepository refreshTokenRepository) {
+    public RefreshTokenService(UserRepository userRepository, RefreshTokenRepository refreshTokenRepository, GenerateCookies generateCookies) {
         this.userRepository = userRepository;
         this.refreshTokenRepository = refreshTokenRepository;
+        this.generateCookies = generateCookies;
     }
 
     public RefreshToken createRefreshToken(String username){
@@ -47,7 +49,8 @@ public class RefreshTokenService {
         return refreshToken;
     }
 
-    public RefreshToken verifyRefreshToken(String refreshToken){
+    public RefreshToken verifyRefreshToken(HttpServletRequest request){
+        String refreshToken = generateCookies.getRefreshTokenFromCookies(request);
         RefreshToken existingRefreshToken = refreshTokenRepository
                 .findByRefreshToken(refreshToken)
                 .orElseThrow(()->new RefreshTokenNotFound("Refresh token not found"));

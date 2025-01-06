@@ -5,7 +5,6 @@ import com.pol.blog_service.dto.tags.TagPageResponseDTO;
 import com.pol.blog_service.dto.tags.TagRequestDTO;
 import com.pol.blog_service.dto.tags.TagResponseDTO;
 import com.pol.blog_service.dto.tags.TagSummaryDTO;
-import com.pol.blog_service.entity.Blog;
 import com.pol.blog_service.entity.Tags;
 import com.pol.blog_service.exception.customExceptions.EntityNotFound;
 import com.pol.blog_service.mapper.TagsMapper;
@@ -18,7 +17,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -33,7 +31,9 @@ public class TagsServiceImpl implements TagsService {
 
     @Override
     public TagResponseDTO createTag(TagRequestDTO tagRequestDTO) {
-        return TagsMapper.toResponseDTO(tagsRepository.save(TagsMapper.toEntity(tagRequestDTO)));
+        Tags tagEntity = TagsMapper.toEntity(tagRequestDTO);
+        System.out.println(tagEntity);
+        return TagsMapper.toResponseDTO(tagsRepository.save(tagEntity));
     }
 
     @Override
@@ -42,7 +42,7 @@ public class TagsServiceImpl implements TagsService {
             throw new EntityNotFound("Tag not found with id: "+id);
         };
         Tags tag= tagsRepository.findById(id).orElseThrow(()-> new EntityNotFound("Tag not found with id: "+id)); // make a custom query to not load all the blogs
-        tag.setTagName(tagRequestDTO.getTagName());
+        tag.setTagName(tagRequestDTO.getTagname());
         return TagsMapper.toResponseDTO(tagsRepository.save(tag));
     }
 

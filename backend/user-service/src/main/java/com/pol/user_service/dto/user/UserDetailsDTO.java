@@ -3,8 +3,6 @@ package com.pol.user_service.dto.user;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.Set;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor

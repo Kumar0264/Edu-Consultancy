@@ -23,7 +23,7 @@ public class ResendService {
     }
 
 
-    public String sendWelcomeEmail(String to, String userName) {
+    public void sendWelcomeEmail(String to, String userName) {
 
         CreateEmailOptions options = CreateEmailOptions.builder()
                 .from(fromEmail)
@@ -31,31 +31,39 @@ public class ResendService {
                 .subject("Welcome, "+userName)
                 .html(emailTemplates.getWelcomeTemplate(userName))
                 .build();
-
-        CreateEmailResponse response = null;
         try {
-            response = resend.emails().send(options);
+             resend.emails().send(options);
         } catch (ResendException e) {
             throw new RuntimeException("There was a error while sending email. Please try again later.");
         }
-        return response.getId();
     }
 
 
-    public String sendForgotPasswordOTPEmail(String to, String name,String otp) {
+    public void sendForgotPasswordOTPEmail(String to, String name,String otp) {
         CreateEmailOptions options = CreateEmailOptions.builder()
                 .from(fromEmail)
                 .to(to)
                 .subject("OTP VERIFICATION")
                 .html(emailTemplates.getForgotPasswordTemplate(name,otp))
                 .build();
-
-        CreateEmailResponse response = null;
         try {
-            response = resend.emails().send(options);
+            resend.emails().send(options);
         } catch (ResendException e) {
             throw new RuntimeException("There was a error while sending email. Please try again later.");
         }
-        return response.getId();
+    }
+
+    public void sendCoursePurchasedEmail(String orderId,String userId, String amount, String currency, String productId, String purchasedAt) {
+        CreateEmailOptions options = CreateEmailOptions.builder()
+                .from(fromEmail)
+                .to("info.coderpol@gmail.com")
+                .subject("Course sold")
+                .html(emailTemplates.getCoursePurchaseTemplate(orderId, userId, amount, currency, productId, purchasedAt))
+                .build();
+        try {
+            resend.emails().send(options);
+        } catch (ResendException e) {
+            throw new RuntimeException("There was a error while sending email. Please try again later.");
+        }
     }
 }

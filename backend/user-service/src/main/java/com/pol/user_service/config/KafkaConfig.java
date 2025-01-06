@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.core.*;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
-import org.springframework.kafka.support.serializer.JsonSerializer;
+
 
 import java.util.HashMap;
 import java.util.Map;

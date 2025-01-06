@@ -30,6 +30,7 @@ public class Tags {
     @ManyToMany(mappedBy = "tags", fetch = FetchType.EAGER)
     private Set<Blog> blogs;
 
+
     @PrePersist
     @PreUpdate
     protected void generateSlug(){

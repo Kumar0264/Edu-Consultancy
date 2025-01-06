@@ -47,6 +47,9 @@ importers:
       '@tanstack/react-router':
         specifier: ^1.85.0
         version: 1.85.0(@tanstack/router-generator@1.84.4)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@tanstack/zod-adapter':
+        specifier: ^1.92.3
+        version: 1.92.3(@tanstack/react-router@1.85.0(@tanstack/router-generator@1.84.4)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(zod@3.23.8)
       '@tanstack/zod-form-adapter':
         specifier: ^0.39.0
         version: 0.39.0(zod@3.23.8)
@@ -98,6 +101,9 @@ importers:
       prettier:
         specifier: ^3.4.1
         version: 3.4.1
+      razorpay:
+        specifier: ^2.9.5
+        version: 2.9.5
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -1231,6 +1237,13 @@ packages:
   '@tanstack/virtual-file-routes@1.81.9':
     resolution: {integrity: sha512-jV5mWJrsh3QXHpb/by6udSqwva0qK50uYHpIXvKsLaxnlbjbLfflfPjFyRWXbMtZsnzCjSUqp5pm5/p+Wpaerg==}
     engines: {node: '>=12'}
+
+  '@tanstack/zod-adapter@1.92.3':
+    resolution: {integrity: sha512-N9untnJP628+/3loYHT8QJ5jDjoiQNpCy4yTT4yQ+b+wuUvFK+IVL7KQGEzV5zLLQ25y8SiVz+v6GRkKOuVrJA==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      '@tanstack/react-router': '>=1.43.2'
+      zod: ^3.23.8
 
   '@tanstack/zod-form-adapter@0.39.0':
     resolution: {integrity: sha512-r0clT837xCFhPVLy7264P9rEFQOphcCBWUdlNKlumllUOVoQidFdl5gjToGRf3KEJe6+ZLB5qNKLtyyrMItXkQ==}
@@ -2421,6 +2434,9 @@ packages:
 
   queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
+
+  razorpay@2.9.5:
+    resolution: {integrity: sha512-bmybwyszgfbYWAdO4igyHFk5zFj/D4YuoZAFNbyIYnPwzd+FBY5WvtpfUA9lVBMgnV4NzVEhncxR3It9RI/gCQ==}
 
   react-dom@18.3.1:
     resolution: {integrity: sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw==}
@@ -3789,6 +3805,11 @@ snapshots:
 
   '@tanstack/virtual-file-routes@1.81.9': {}
 
+  '@tanstack/zod-adapter@1.92.3(@tanstack/react-router@1.85.0(@tanstack/router-generator@1.84.4)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(zod@3.23.8)':
+    dependencies:
+      '@tanstack/react-router': 1.85.0(@tanstack/router-generator@1.84.4)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      zod: 3.23.8
+
   '@tanstack/zod-form-adapter@0.39.0(zod@3.23.8)':
     dependencies:
       '@tanstack/form-core': 0.39.0
@@ -5121,6 +5142,12 @@ snapshots:
   punycode@2.3.1: {}
 
   queue-microtask@1.2.3: {}
+
+  razorpay@2.9.5:
+    dependencies:
+      axios: 1.7.8
+    transitivePeerDependencies:
+      - debug
 
   react-dom@18.3.1(react@18.3.1):
     dependencies:

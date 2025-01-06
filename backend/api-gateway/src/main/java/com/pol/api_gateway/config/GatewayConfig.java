@@ -54,6 +54,14 @@ public class GatewayConfig {
                         .filters(f -> f.rewritePath("/categories(?<segment>/?.*)", "/product-service/categories${segment}"))
                         .uri(PRODUCT_SERVICE_LB))
 
+                // GUEST ROUTES FOR THE ENGAGEMENT SERVICE
+                .route("engagement_service_contactus", r -> r.path("/contactus/**")
+                        .filters(f -> f.rewritePath("/contactus(?<segment>/?.*)", "/engagement-service/contactus${segment}"))
+                        .uri(ENGAGEMENT_SERVICE_LB))
+                .route("engagement_service_feedbacks", r -> r.path("/feedbacks/**")
+                        .filters(f -> f.rewritePath("/feedbacks(?<segment>/?.*)", "/engagement-service/feedbacks${segment}"))
+                        .uri(ENGAGEMENT_SERVICE_LB))
+
                 // USER ROUTES FOR THE PAYMENTS SERVICE
                 .route("payment_service_tags", r -> r.path("/payments/**")
                         .filters(f -> f.rewritePath("/payments(?<segment>/?.*)", "/payment-service/payments${segment}")
@@ -84,6 +92,18 @@ public class GatewayConfig {
                                         .filter(getJwtAuthorizationFilter(ADMIN_ONLY)))
                         .uri(PRODUCT_SERVICE_LB))
 
+                // ADMIN ROUTES FOR THE ENGAGEMENT SERVICE
+                .route("engagement_service_contactus_admin", r -> r.path("/admin/contactus/**")
+                        .filters(f ->
+                                f.rewritePath("/admin/contactus(?<segment>/?.*)", "/engagement-service/admin/contactus${segment}")
+                                        .filter(getJwtAuthorizationFilter(ADMIN_ONLY)))
+                        .uri(ENGAGEMENT_SERVICE_LB))
+                .route("engagement_service_admin", r -> r.path("/admin/feedbacks/**")
+                        .filters(f ->
+                                f.rewritePath("/admin/feedbacks(?<segment>/?.*)", "/engagement-service/admin/feedbacks${segment}")
+                                        .filter(getJwtAuthorizationFilter(ADMIN_ONLY)))
+                        .uri(ENGAGEMENT_SERVICE_LB))
+
                 .build();
     }
 
@@ -97,5 +117,6 @@ public class GatewayConfig {
     private static final String BLOG_SERVICE_LB = "lb://BLOG-SERVICE";
     private static final String PRODUCT_SERVICE_LB = "lb://PRODUCT-SERVICE";
     private static final String PAYMENT_SERVICE_LB = "lb://PAYMENT-SERVICE";
+    private static final String ENGAGEMENT_SERVICE_LB = "lb://ENGAGEMENT-SERVICE";
 }
 

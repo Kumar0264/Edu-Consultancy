@@ -2,9 +2,11 @@ package com.pol.api_gateway.config;
 
 import com.pol.api_gateway.exception.JwtExceptions;
 import com.pol.api_gateway.service.JwtService;
+import jakarta.ws.rs.core.Cookie;
 import org.apache.http.HttpHeaders;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
+import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;

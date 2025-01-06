@@ -43,13 +43,13 @@ public class TagsServiceTests {
     private TagsServiceImpl tagsService;
 
 
-    @DisplayName("JUnit test for createTag method")
+    @DisplayName("JUnit test for tagsService.createTag() method")
     @Test
     void givenTagRequestDTO_whenCreateTag_thenReturnTagResponseDTO() {
         // Given
         String tagName = "Technology";
         TagRequestDTO requestDTO = TagRequestDTO.builder()
-                .tagName(tagName)
+                .tagname(tagName)
                 .build();
         Tags mockSavedTag = Tags.builder()
                 .id(UUID.randomUUID())
@@ -75,11 +75,12 @@ public class TagsServiceTests {
         assertThat(result.getTagName()).isEqualTo(expectedResponse.getTagName());
     }
 
+    @DisplayName("JUnit test for tagsService.updateTagById() method")
     @Test
     void givenIdAndRequestDTO_whenUpdateById_thenReturnTagResponseDTO() {
         // Given
         UUID id = UUID.randomUUID();
-        TagRequestDTO requestDTO = TagRequestDTO.builder().tagName("UpdatedTag").build();
+        TagRequestDTO requestDTO = TagRequestDTO.builder().tagname("UpdatedTag").build();
         Tags existingTag = Tags.builder().id(id).tagName("OldTag").build();
         Tags updatedTag = Tags.builder().id(id).tagName("UpdatedTag").build();
         TagResponseDTO summaryDTO = TagResponseDTO.builder().id(id).tagName("UpdatedTag").build();
@@ -100,7 +101,7 @@ public class TagsServiceTests {
         assertThat(result.getTagName()).isEqualTo("UpdatedTag");
     }
 
-    @DisplayName("")
+    @DisplayName("JUnit test for tagsService.getBlogsByTagId() method")
     @Test
     public void givenTagId_whenGetBlogsByTagId_thenReturnTagPageResponseDTO(){
         // Given
@@ -124,7 +125,7 @@ public class TagsServiceTests {
         then(blogPage).should().getContent();
     }
 
-    @DisplayName("")
+    @DisplayName("JUnit test for tagsService.deleteTagById() method")
     @Test
     public void givenId_whenDeleteTagById_thenDeleteTagAndNoReturn(){
         // Given
@@ -140,9 +141,9 @@ public class TagsServiceTests {
         then(tagsRepository).should().deleteById(tagId);
     }
 
-    @DisplayName("")
+    @DisplayName("JUnit test for tagsService.getAllTags() method")
     @Test
-    public void given_when_then(){
+    public void whenGetAllTags_thenReturnTagSummaryDTOList(){
         // Given
         List<TagSummaryDTO> summaryDTOList = List.of(
                 TagSummaryDTO.builder().id(UUID.randomUUID()).tagName("Tech").build(),

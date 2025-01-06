@@ -7,14 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -109,7 +104,7 @@ public class GlobalExceptionHandler {
                 ex.getMessage()
         );
         logger.error("RefreshTokenExpiredException occurred: {}",ex.getMessage(),ex);
-        return new ResponseEntity<>(errorResponse,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorResponse,HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(RefreshTokenNotFound.class)

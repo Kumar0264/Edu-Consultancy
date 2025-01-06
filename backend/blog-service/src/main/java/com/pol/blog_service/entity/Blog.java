@@ -2,7 +2,6 @@ package com.pol.blog_service.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -37,13 +36,16 @@ public class Blog {
 
     private UUID authorId;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private String imageUrl;
+
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "blog_tags",
             joinColumns = @JoinColumn(name = "blog_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     private Set<Tags> tags;
+
 
     @Column(updatable = false)
     private LocalDateTime publishedAt;

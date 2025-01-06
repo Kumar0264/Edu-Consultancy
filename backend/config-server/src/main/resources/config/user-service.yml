@@ -36,6 +36,11 @@ jwt:
   refresh-expiration: 604800000
   forgot-expiration: 900000
 
+resend:
+  key: re_fgWQ8DLw_28pKziHpKst9ybLdwqPjQc1W
+  from-email: onboarding@resend.dev
+
+
 springdoc:
   api-docs:
     path: /api-docs

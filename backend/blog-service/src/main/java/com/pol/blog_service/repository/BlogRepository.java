@@ -1,13 +1,11 @@
 package com.pol.blog_service.repository;
 
 
-import com.pol.blog_service.dto.blog.BlogResponseDTO;
 import com.pol.blog_service.dto.blog.BlogSummaryDTO;
 import com.pol.blog_service.entity.Blog;
 import com.pol.blog_service.entity.BlogStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,7 +18,7 @@ import java.util.UUID;
 public interface BlogRepository extends JpaRepository<Blog, UUID> {
 
     @Query(
-            "SELECT new com.pol.blog_service.dto.blog.BlogSummaryDTO(b.id, b.title, b.publishedAt, b.summary, b.status, b.author, b.authorId) " +
+            "SELECT new com.pol.blog_service.dto.blog.BlogSummaryDTO(b.id, b.title, b.publishedAt, b.summary, b.status, b.author, b.authorId, b.imageUrl) " +
                     "FROM Blog b " +
                     "JOIN b.tags t " +
                     "WHERE t.id = :tagId " +
@@ -38,7 +36,7 @@ public interface BlogRepository extends JpaRepository<Blog, UUID> {
 //    Optional<BlogResponseDTO> findBlogByIdWithTags(@Param("blogId") UUID blogId);
 
     @Query(
-            "SELECT new com.pol.blog_service.dto.blog.BlogSummaryDTO(b.id, b.title, b.publishedAt, b.summary, b.status, b.author, b.authorId) " +
+            "SELECT new com.pol.blog_service.dto.blog.BlogSummaryDTO(b.id, b.title, b.publishedAt, b.summary, b.status, b.author, b.authorId, b.imageUrl) " +
             "FROM Blog b " +
             "WHERE LOWER(b.title) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
             "OR LOWER(b.content) LIKE LOWER(CONCAT('%', :keyword, '%'))"  +
@@ -48,11 +46,12 @@ public interface BlogRepository extends JpaRepository<Blog, UUID> {
 
 
     @Query(
-            "SELECT new com.pol.blog_service.dto.blog.BlogSummaryDTO(b.id, b.title, b.publishedAt, b.summary, b.status, b.author, b.authorId) " +
-            "FROM Blog b " +
-            "WHERE b.status= com.pol.blog_service.entity.BlogStatus.PUBLISHED"
+            "SELECT new com.pol.blog_service.dto.blog.BlogSummaryDTO(b.id, b.title, b.publishedAt, b.summary, b.status, b.author, b.authorId, b.imageUrl) " +
+                    "FROM Blog b " +
+                    "WHERE (:status IS NULL OR b.status = :status)"
     )
-    Page<BlogSummaryDTO> findAllBlogSummary(Pageable pageable);
+    Page<BlogSummaryDTO> findBlogsByStatus(@Param("status") BlogStatus status, Pageable pageable);
+
 
 
     @Query("SELECT b FROM Blog b JOIN FETCH b.tags WHERE b.id = :blogId AND b.status = :status")

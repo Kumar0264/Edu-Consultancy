@@ -6,14 +6,18 @@ import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Set;
 import java.util.UUID;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class BlogRequestDTO {
 
     @NotBlank(message = "Please provide title.")
@@ -21,6 +25,9 @@ public class BlogRequestDTO {
 
     @NotBlank(message = "Please write something")
     private String content;
+
+    @NotBlank(message = "Please provide imageUrl")
+    private String imageUrl;
 
     @Size(max = 10, message = "You can add up to 10 tags only.")
     @NotNull(message = "You need to provide at least one tag.")

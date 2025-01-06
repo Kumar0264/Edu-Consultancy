@@ -5,51 +5,43 @@ import com.pol.user_service.auth.dto.EmailRequestDTO;
 import com.pol.user_service.auth.dto.VerifyOtpDTO;
 import com.pol.user_service.auth.model.ForgotPassword;
 import com.pol.user_service.auth.model.User;
+import com.pol.user_service.auth.model.UserRole;
 import com.pol.user_service.auth.repository.ForgotPasswordRepository;
 import com.pol.user_service.auth.repository.UserRepository;
-import com.pol.user_service.auth.service.AuthService;
+import com.pol.user_service.auth.service.GenerateCookies;
 import com.pol.user_service.auth.service.JwtService;
 import com.pol.user_service.auth.service.RefreshTokenService;
-import com.pol.user_service.config.KafkaConfig;
 import com.pol.user_service.constants.KafkaTopics;
 import com.pol.user_service.exception.customExceptions.InvalidOTPException;
 import com.pol.user_service.exception.customExceptions.OTPExpiredException;
 import com.pol.user_service.exception.customExceptions.TooManyAttemptsException;
 import com.pol.user_service.exception.customExceptions.UserNotFoundException;
 import com.pol.user_service.schema.avro.ForgotPasswordEvent;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.Date;
 import java.util.Random;
+import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 public class EmailService {
     private final UserRepository userRepository;
     private final ForgotPasswordRepository forgotPasswordRepository;
     private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
+    private final GenerateCookies generateCookies;
 
     private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
     private final KafkaTemplate<String,Object> kafkaTemplate;
-
-    public EmailService(UserRepository userRepository,
-                        ForgotPasswordRepository forgotPasswordRepository,
-                        JwtService jwtService,
-                        RefreshTokenService refreshTokenService,
-                        KafkaTemplate<String, Object> kafkaTemplate) {
-        this.userRepository = userRepository;
-        this.forgotPasswordRepository = forgotPasswordRepository;
-        this.jwtService = jwtService;
-        this.refreshTokenService = refreshTokenService;
-        this.kafkaTemplate = kafkaTemplate;
-    }
 
     @Value("${jwt.forgot-expiration}")
     private long forgotPasswordExpiration;
@@ -82,7 +74,7 @@ public class EmailService {
 
 
     @Transactional
-    public AuthResponseDTO verifyOTP(VerifyOtpDTO verifyOtpDTO) {
+    public AuthResponseDTO verifyOTP(VerifyOtpDTO verifyOtpDTO,HttpServletResponse response) {
         User user = userRepository.findByEmail(verifyOtpDTO.getEmail())
                 .orElseThrow(() -> new UserNotFoundException("User not found with email address: " + verifyOtpDTO.getEmail()));
 
@@ -97,6 +89,7 @@ public class EmailService {
         }
 
         if (forgotPasswordObj.getAttempts() >= 3) {
+            System.out.println("Too Many Attempts. Current Attempts: " + forgotPasswordObj.getAttempts());
             forgotPasswordRepository.deleteById(forgotPasswordObj.getId());
             throw new TooManyAttemptsException("Too many attempts. Please request a new OTP.");
         }
@@ -113,9 +106,14 @@ public class EmailService {
         var accessToken = jwtService.generateToken(user);
         var refreshToken = refreshTokenService.createRefreshToken(user.getEmail());
 
+        generateCookies.addRefreshTokenToCookie(response,refreshToken.getRefreshToken());
+        Set<UserRole> roles = user.getRoles();
+        String roleName = roles.iterator().next().getRoleName();
+
         return AuthResponseDTO.builder()
                 .accessToken(accessToken)
-                .refreshToken(refreshToken.getRefreshToken())
+                .role(roleName)
+                .username(user.getActualUsername())
                 .build();
     }
 

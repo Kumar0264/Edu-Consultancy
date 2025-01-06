@@ -2,6 +2,7 @@ package com.pol.product_service.controller;
 
 import com.pol.product_service.DTO.category.CategoryRequestDTO;
 import com.pol.product_service.DTO.category.CategoryResponseDTO;
+import com.pol.product_service.DTO.course.AdminCourseResponseDTO;
 import com.pol.product_service.DTO.course.CourseRequestDTO;
 import com.pol.product_service.DTO.course.CourseResponseDTO;
 import com.pol.product_service.service.CategoryService;
@@ -64,6 +65,11 @@ public class AdminController {
                                                               @RequestBody @Valid CourseRequestDTO courseRequestDTO,
                                                               @RequestHeader("X-User-Id") String userId){
         return ResponseEntity.ok(courseService.updateCourseById(id,courseRequestDTO,userId));
+    }
+
+    @GetMapping("/courses/{id}")
+    public ResponseEntity<AdminCourseResponseDTO> getCourseById(@PathVariable UUID id){
+        return ResponseEntity.ok(courseService.getCourseByIdForAdmin(id));
     }
 
     @DeleteMapping("/courses/{id}")

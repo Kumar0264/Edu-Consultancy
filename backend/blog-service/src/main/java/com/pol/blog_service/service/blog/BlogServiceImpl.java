@@ -6,6 +6,7 @@ import com.pol.blog_service.dto.blog.BlogResponseDTO;
 import com.pol.blog_service.dto.blog.BlogSummaryDTO;
 import com.pol.blog_service.entity.Blog;
 import com.pol.blog_service.entity.BlogStatus;
+import com.pol.blog_service.entity.Tags;
 import com.pol.blog_service.exception.customExceptions.EntityNotFound;
 import com.pol.blog_service.exception.customExceptions.UnauthorizedActionException;
 import com.pol.blog_service.mapper.BlogMapper;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 
@@ -44,22 +46,33 @@ public class BlogServiceImpl implements BlogService{
     }
 
     @Override
-    public BlogResponseDTO updateBlog(BlogRequestDTO blogRequestDTO,UUID id,String userId){
-        Blog blog = blogRepository.findById(id).orElseThrow(()->new EntityNotFound("Blog not found with id: "+id));
-        if(!UUID.fromString(userId).equals(blog.getAuthorId())){
-            throw new UnauthorizedActionException("You are not authorized to delete this blog.");
+    public BlogResponseDTO updateBlog(BlogRequestDTO blogRequestDTO, UUID id, String userId) {
+        Blog blog = blogRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFound("Blog not found with id: " + id));
+
+        if (!UUID.fromString(userId).equals(blog.getAuthorId())) {
+            throw new UnauthorizedActionException("You are not authorized to update this blog.");
         }
+
         blog.setTitle(blogRequestDTO.getTitle());
         blog.setContent(blogRequestDTO.getContent());
         blog.setStatus(blogRequestDTO.getStatus());
+        blog.setImageUrl(blogRequestDTO.getImageUrl());
+        blog.getTags().forEach(tag -> tag.getBlogs().remove(blog)); // Remove this blog from each tag
         blog.setTags(new HashSet<>(tagsRepository.findAllById(blogRequestDTO.getTagIds())));
-        blog.setPublishedAt(blogRequestDTO.getStatus()== BlogStatus.PUBLISHED? LocalDateTime.now():null);
+
+        if (blogRequestDTO.getStatus() == BlogStatus.PUBLISHED) {
+            blog.setPublishedAt(LocalDateTime.now());
+        }
+
         return BlogMapper.toResponseDTO(blogRepository.save(blog));
     }
 
+
+
     @Override
     public BlogResponseDTO getBlogById(UUID id){
-        Blog blog = blogRepository.findByIdAndStatusWithTags(id,BlogStatus.PUBLISHED).orElseThrow(()->new EntityNotFound("Blog not found with id: "+id));
+        Blog blog = blogRepository.findById(id).orElseThrow(()->new EntityNotFound("Blog not found with id: "+id));
         System.out.println(blog);
         return BlogMapper.toResponseDTO(blog);
     }
@@ -74,14 +87,19 @@ public class BlogServiceImpl implements BlogService{
     }
 
     @Override
-    public BlogPageResponseDTO getAllBlogs(int page, int size, String sortBy, String order) {
+    public BlogPageResponseDTO getAllBlogs(int page, int size, String sortBy, String order, BlogStatus status) {
         String[] sortFields = sortBy.split(",");
         Sort sort = Sort.by(order.equalsIgnoreCase("asc")?Sort.Order.asc(sortFields[0]):Sort.Order.desc(sortFields[0]));
         for(int i=1;i<sortFields.length;i++){
             sort= Sort.by(order.equalsIgnoreCase("asc")?Sort.Order.asc(sortFields[i]):Sort.Order.desc(sortFields[i]));
         }
         Pageable pageable = PageRequest.of(page,size,sort);
-        Page<BlogSummaryDTO> blogs = blogRepository.findAllBlogSummary(pageable);
+        Page<BlogSummaryDTO> blogs;
+        if (status != null) {
+            blogs = blogRepository.findBlogsByStatus(status, pageable);
+        } else {
+            blogs = blogRepository.findBlogsByStatus(null, pageable);
+        }
         return BlogPageResponseDTO.builder()
                 .blogs(blogs.getContent())
                 .currentPage(blogs.getNumber())

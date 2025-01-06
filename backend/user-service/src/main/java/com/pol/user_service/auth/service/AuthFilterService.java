@@ -31,16 +31,27 @@ public class AuthFilterService extends OncePerRequestFilter {
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
 
-        final String authHeader = request.getHeader("Authorization");
-        String jwt;
+
+        String jwt = null;
         String username;
-        if(authHeader==null || !authHeader.startsWith("Bearer ")){
-            filterChain.doFilter(request,response);
+
+        // Extract token from cookies
+        if (request.getCookies() != null) {
+            for (var cookie : request.getCookies()) {
+                if ("accessToken".equals(cookie.getName())) {
+                    jwt = cookie.getValue();
+                    break;
+                }
+            }
+        }
+
+        // If no token is found in the cookies, continue the filter chain
+        if (jwt == null) {
+            filterChain.doFilter(request, response);
             return;
         }
 
-        jwt = authHeader.substring(7);
-
+        // Extract username from JWT
         username = jwtService.extractUsername(jwt);
 
         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
@@ -60,5 +71,4 @@ public class AuthFilterService extends OncePerRequestFilter {
         }
         filterChain.doFilter(request,response);
     }
-
 }

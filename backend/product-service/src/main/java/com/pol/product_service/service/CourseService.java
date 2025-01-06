@@ -44,6 +44,12 @@ public class CourseService {
                         ()->new CourseNotFoundException("Course not found with id : "+id)));
     }
 
+    public AdminCourseResponseDTO getCourseByIdForAdmin(UUID id){
+        return CourseMapper.toAdminCourseResponseDTO(courseRepository.findById(id).orElseThrow(
+                ()-> new CourseNotFoundException("Course not found with id : "+id)
+        ));
+    }
+
     public CoursePriceDTO getCoursePriceById(UUID id){
         return courseRepository.getCoursePriceById(id);
     }
@@ -68,6 +74,7 @@ public class CourseService {
         course.setDescription(courseRequestDTO.getDescription());
         course.setSummary(courseRequestDTO.getSummary());
         course.setPrice(courseRequestDTO.getPrice());
+        course.setImageUrl(courseRequestDTO.getImageUrl());
         course.setCategory(categoryRepository.findById(courseRequestDTO.getCategoryId())
                 .orElseThrow(()->new CategoryNotFoundException("Category not found with id :"+courseRequestDTO.getCategoryId())));
         return CourseMapper.toResponseDTO(courseRepository.save(course));

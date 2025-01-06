@@ -1,7 +1,6 @@
 package com.pol.user_service.auth.config;
 
 import com.pol.user_service.auth.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

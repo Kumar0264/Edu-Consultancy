@@ -1,19 +1,10 @@
 package com.pol.blog_service.controller;
 
 import com.pol.blog_service.dto.blog.BlogPageResponseDTO;
-import com.pol.blog_service.dto.blog.BlogRequestDTO;
 import com.pol.blog_service.dto.blog.BlogResponseDTO;
-import com.pol.blog_service.entity.Blog;
+import com.pol.blog_service.entity.BlogStatus;
 import com.pol.blog_service.service.blog.BlogService;
-import com.pol.blog_service.service.blog.BlogServiceImpl;
 import com.pol.blog_service.utils.AppConstants;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,9 +35,11 @@ public class BlogController {
             @RequestParam(defaultValue = AppConstants.PAGE,required = false) int page,
             @RequestParam(defaultValue = AppConstants.SIZE,required = false) int size,
             @RequestParam(defaultValue = AppConstants.SORT_BY_BLOG_PUBLISHED_AT,required = false) String sortBy,
-            @RequestParam(defaultValue = AppConstants.ORDER,required = false) String order
+            @RequestParam(defaultValue = AppConstants.ORDER,required = false) String order,
+            @RequestParam(defaultValue = AppConstants.STATUS,required = false) String status
     ){
-        return ResponseEntity.ok(blogService.getAllBlogs(page,size,sortBy,order));
+        BlogStatus blogStatus = BlogStatus.valueOf(status.toUpperCase());
+        return ResponseEntity.ok(blogService.getAllBlogs(page,size,sortBy,order,blogStatus));
     }
 
     @GetMapping("/search")

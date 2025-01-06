@@ -76,5 +76,78 @@ public class EmailTemplates {
         """.formatted(username,otp);
     }
 
-
+    public static String getCoursePurchaseTemplate(String orderId, String userName, String amount, String currency, String productId, String purchasedAt) {
+        return """
+                <html>
+                <head>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            line-height: 1.6;
+                            color: #333333;
+                        }
+                        .container {
+                            max-width: 600px;
+                            margin: auto;
+                            padding: 20px;
+                            border: 1px solid #dddddd;
+                            border-radius: 10px;
+                            background-color: #f9f9f9;
+                        }
+                        .header {
+                            font-size: 24px;
+                            font-weight: bold;
+                            color: #444444;
+                            text-align: center;
+                            margin-bottom: 20px;
+                        }
+                        .footer {
+                            font-size: 12px;
+                            text-align: center;
+                            color: #777777;
+                            margin-top: 20px;
+                        }
+                        .details {
+                            margin-top: 10px;
+                        }
+                        .details th, .details td {
+                            text-align: left;
+                            padding: 5px;
+                        }
+                        .details th {
+                            font-weight: bold;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <div class="header">Thank You for Your Purchase!</div>
+                        <p>Hi %s,</p>
+                        <p>Thank you for purchasing the course. Here are the details of your purchase:</p>
+                        <table class="details">
+                            <tr>
+                                <th>Order ID:</th>
+                                <td>%s</td>
+                            </tr>
+                            <tr>
+                                <th>Product ID:</th>
+                                <td>%s</td>
+                            </tr>
+                            <tr>
+                                <th>Amount:</th>
+                                <td>%s %s</td>
+                            </tr>
+                            <tr>
+                                <th>Purchased At:</th>
+                                <td>%s</td>
+                            </tr>
+                        </table>
+                        <p>If you have any questions, feel free to contact us.</p>
+                        <p>Best regards,<br>Your EduConsultancy Team</p>
+                        <div class="footer">© 2024 EduConsultancy. All Rights Reserved.</div>
+                    </div>
+                </body>
+                </html>
+                """.formatted(userName, orderId, productId, currency, amount, purchasedAt);
+    }
 }

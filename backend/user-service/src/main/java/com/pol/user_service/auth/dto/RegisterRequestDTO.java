@@ -20,7 +20,7 @@ public class RegisterRequestDTO {
 
     @NotBlank(message = "Last name is required.")
     @Size(max = 30, message = "Last name can not longer than 30 letters.")
-    private String LastName;
+    private String lastName;
 
     @Email(message = "Email address is not valid.")
     @NotBlank(message = "Email is required")

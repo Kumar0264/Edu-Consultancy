@@ -2,13 +2,9 @@ package com.pol.blog_service.controller;
 
 
 import com.pol.blog_service.dto.tags.TagPageResponseDTO;
-import com.pol.blog_service.dto.tags.TagRequestDTO;
-import com.pol.blog_service.dto.tags.TagResponseDTO;
 import com.pol.blog_service.dto.tags.TagSummaryDTO;
 import com.pol.blog_service.service.tags.TagsService;
-import com.pol.blog_service.service.tags.TagsServiceImpl;
 import com.pol.blog_service.utils.AppConstants;
-import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

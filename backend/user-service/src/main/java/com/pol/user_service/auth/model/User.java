@@ -5,15 +5,18 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Builder;
 
 @Entity
 @AllArgsConstructor
@@ -73,7 +76,9 @@ public class User implements CustomUserDetails {
                 .collect(Collectors.toSet());
     }
 
-
+    public String getActualUsername(){
+        return this.username;
+    }
 
     @Override
     public String getUsername(){
