@@ -2,7 +2,6 @@ package com.pol.user_service.controller;
 
 import com.pol.user_service.auth.dto.AuthResponseDTO;
 import com.pol.user_service.auth.dto.LoginRequestDTO;
-import com.pol.user_service.auth.dto.RefreshTokenRequestDTO;
 import com.pol.user_service.auth.dto.RegisterRequestDTO;
 import com.pol.user_service.auth.model.RefreshToken;
 import com.pol.user_service.auth.model.User;
@@ -11,6 +10,7 @@ import com.pol.user_service.auth.service.AuthService;
 import com.pol.user_service.auth.service.GenerateCookies;
 import com.pol.user_service.auth.service.JwtService;
 import com.pol.user_service.auth.service.RefreshTokenService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -64,6 +64,17 @@ public class AuthController {
                 .username(user.getActualUsername())
                 .build());
 
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletResponse response){
+        Cookie cookie = new Cookie("refreshToken", null);
+        cookie.setHttpOnly(true);
+//        cookie.setSecure(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return ResponseEntity.ok("Logout successful");
     }
 }
 

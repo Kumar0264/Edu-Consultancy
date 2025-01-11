@@ -33,11 +33,11 @@ import { Route as LayoutCoursesIdImport } from './routes/_layout/courses/$id'
 import { Route as LayoutBlogsIdImport } from './routes/_layout/blogs/$id'
 import { Route as AdminAdminSettingsImport } from './routes/_admin/admin/settings'
 import { Route as AdminAdminSearchImport } from './routes/_admin/admin/search'
-import { Route as AdminAdminInboxImport } from './routes/_admin/admin/inbox'
 import { Route as AdminAdminDashboardImport } from './routes/_admin/admin/dashboard'
 import { Route as AdminAdminCalenderImport } from './routes/_admin/admin/calender'
 import { Route as LayoutUserProfileIndexImport } from './routes/_layout/_user/profile/index'
 import { Route as AdminAdminTagsIndexImport } from './routes/_admin/admin/tags/index'
+import { Route as AdminAdminPaymentsIndexImport } from './routes/_admin/admin/payments/index'
 import { Route as AdminAdminFeedbackIndexImport } from './routes/_admin/admin/feedback/index'
 import { Route as AdminAdminCoursesIndexImport } from './routes/_admin/admin/courses/index'
 import { Route as AdminAdminContactUsIndexImport } from './routes/_admin/admin/contact-us/index'
@@ -185,12 +185,6 @@ const AdminAdminSearchRoute = AdminAdminSearchImport.update({
   getParentRoute: () => AdminRoute,
 } as any)
 
-const AdminAdminInboxRoute = AdminAdminInboxImport.update({
-  id: '/admin/inbox',
-  path: '/admin/inbox',
-  getParentRoute: () => AdminRoute,
-} as any)
-
 const AdminAdminDashboardRoute = AdminAdminDashboardImport.update({
   id: '/admin/dashboard',
   path: '/admin/dashboard',
@@ -212,6 +206,12 @@ const LayoutUserProfileIndexRoute = LayoutUserProfileIndexImport.update({
 const AdminAdminTagsIndexRoute = AdminAdminTagsIndexImport.update({
   id: '/admin/tags/',
   path: '/admin/tags/',
+  getParentRoute: () => AdminRoute,
+} as any)
+
+const AdminAdminPaymentsIndexRoute = AdminAdminPaymentsIndexImport.update({
+  id: '/admin/payments/',
+  path: '/admin/payments/',
   getParentRoute: () => AdminRoute,
 } as any)
 
@@ -438,13 +438,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAdminDashboardImport
       parentRoute: typeof AdminImport
     }
-    '/_admin/admin/inbox': {
-      id: '/_admin/admin/inbox'
-      path: '/admin/inbox'
-      fullPath: '/admin/inbox'
-      preLoaderRoute: typeof AdminAdminInboxImport
-      parentRoute: typeof AdminImport
-    }
     '/_admin/admin/search': {
       id: '/_admin/admin/search'
       path: '/admin/search'
@@ -585,6 +578,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAdminFeedbackIndexImport
       parentRoute: typeof AdminImport
     }
+    '/_admin/admin/payments/': {
+      id: '/_admin/admin/payments/'
+      path: '/admin/payments'
+      fullPath: '/admin/payments'
+      preLoaderRoute: typeof AdminAdminPaymentsIndexImport
+      parentRoute: typeof AdminImport
+    }
     '/_admin/admin/tags/': {
       id: '/_admin/admin/tags/'
       path: '/admin/tags'
@@ -628,7 +628,6 @@ declare module '@tanstack/react-router' {
 interface AdminRouteChildren {
   AdminAdminCalenderRoute: typeof AdminAdminCalenderRoute
   AdminAdminDashboardRoute: typeof AdminAdminDashboardRoute
-  AdminAdminInboxRoute: typeof AdminAdminInboxRoute
   AdminAdminSearchRoute: typeof AdminAdminSearchRoute
   AdminAdminSettingsRoute: typeof AdminAdminSettingsRoute
   AdminAdminIndexRoute: typeof AdminAdminIndexRoute
@@ -644,6 +643,7 @@ interface AdminRouteChildren {
   AdminAdminContactUsIndexRoute: typeof AdminAdminContactUsIndexRoute
   AdminAdminCoursesIndexRoute: typeof AdminAdminCoursesIndexRoute
   AdminAdminFeedbackIndexRoute: typeof AdminAdminFeedbackIndexRoute
+  AdminAdminPaymentsIndexRoute: typeof AdminAdminPaymentsIndexRoute
   AdminAdminTagsIndexRoute: typeof AdminAdminTagsIndexRoute
   AdminAdminBlogsEditIdRoute: typeof AdminAdminBlogsEditIdRoute
   AdminAdminCategoriesEditIdRoute: typeof AdminAdminCategoriesEditIdRoute
@@ -653,7 +653,6 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAdminCalenderRoute: AdminAdminCalenderRoute,
   AdminAdminDashboardRoute: AdminAdminDashboardRoute,
-  AdminAdminInboxRoute: AdminAdminInboxRoute,
   AdminAdminSearchRoute: AdminAdminSearchRoute,
   AdminAdminSettingsRoute: AdminAdminSettingsRoute,
   AdminAdminIndexRoute: AdminAdminIndexRoute,
@@ -669,6 +668,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminAdminContactUsIndexRoute: AdminAdminContactUsIndexRoute,
   AdminAdminCoursesIndexRoute: AdminAdminCoursesIndexRoute,
   AdminAdminFeedbackIndexRoute: AdminAdminFeedbackIndexRoute,
+  AdminAdminPaymentsIndexRoute: AdminAdminPaymentsIndexRoute,
   AdminAdminTagsIndexRoute: AdminAdminTagsIndexRoute,
   AdminAdminBlogsEditIdRoute: AdminAdminBlogsEditIdRoute,
   AdminAdminCategoriesEditIdRoute: AdminAdminCategoriesEditIdRoute,
@@ -739,7 +739,6 @@ export interface FileRoutesByFullPath {
   '/': typeof LayoutIndexRoute
   '/admin/calender': typeof AdminAdminCalenderRoute
   '/admin/dashboard': typeof AdminAdminDashboardRoute
-  '/admin/inbox': typeof AdminAdminInboxRoute
   '/admin/search': typeof AdminAdminSearchRoute
   '/admin/settings': typeof AdminAdminSettingsRoute
   '/blogs/$id': typeof LayoutBlogsIdRoute
@@ -760,6 +759,7 @@ export interface FileRoutesByFullPath {
   '/admin/contact-us': typeof AdminAdminContactUsIndexRoute
   '/admin/courses': typeof AdminAdminCoursesIndexRoute
   '/admin/feedback': typeof AdminAdminFeedbackIndexRoute
+  '/admin/payments': typeof AdminAdminPaymentsIndexRoute
   '/admin/tags': typeof AdminAdminTagsIndexRoute
   '/profile': typeof LayoutUserProfileIndexRoute
   '/admin/blogs/edit/$id': typeof AdminAdminBlogsEditIdRoute
@@ -782,7 +782,6 @@ export interface FileRoutesByTo {
   '/': typeof LayoutIndexRoute
   '/admin/calender': typeof AdminAdminCalenderRoute
   '/admin/dashboard': typeof AdminAdminDashboardRoute
-  '/admin/inbox': typeof AdminAdminInboxRoute
   '/admin/search': typeof AdminAdminSearchRoute
   '/admin/settings': typeof AdminAdminSettingsRoute
   '/blogs/$id': typeof LayoutBlogsIdRoute
@@ -803,6 +802,7 @@ export interface FileRoutesByTo {
   '/admin/contact-us': typeof AdminAdminContactUsIndexRoute
   '/admin/courses': typeof AdminAdminCoursesIndexRoute
   '/admin/feedback': typeof AdminAdminFeedbackIndexRoute
+  '/admin/payments': typeof AdminAdminPaymentsIndexRoute
   '/admin/tags': typeof AdminAdminTagsIndexRoute
   '/profile': typeof LayoutUserProfileIndexRoute
   '/admin/blogs/edit/$id': typeof AdminAdminBlogsEditIdRoute
@@ -829,7 +829,6 @@ export interface FileRoutesById {
   '/_layout/': typeof LayoutIndexRoute
   '/_admin/admin/calender': typeof AdminAdminCalenderRoute
   '/_admin/admin/dashboard': typeof AdminAdminDashboardRoute
-  '/_admin/admin/inbox': typeof AdminAdminInboxRoute
   '/_admin/admin/search': typeof AdminAdminSearchRoute
   '/_admin/admin/settings': typeof AdminAdminSettingsRoute
   '/_layout/blogs/$id': typeof LayoutBlogsIdRoute
@@ -850,6 +849,7 @@ export interface FileRoutesById {
   '/_admin/admin/contact-us/': typeof AdminAdminContactUsIndexRoute
   '/_admin/admin/courses/': typeof AdminAdminCoursesIndexRoute
   '/_admin/admin/feedback/': typeof AdminAdminFeedbackIndexRoute
+  '/_admin/admin/payments/': typeof AdminAdminPaymentsIndexRoute
   '/_admin/admin/tags/': typeof AdminAdminTagsIndexRoute
   '/_layout/_user/profile/': typeof LayoutUserProfileIndexRoute
   '/_admin/admin/blogs/edit/$id': typeof AdminAdminBlogsEditIdRoute
@@ -874,7 +874,6 @@ export interface FileRouteTypes {
     | '/'
     | '/admin/calender'
     | '/admin/dashboard'
-    | '/admin/inbox'
     | '/admin/search'
     | '/admin/settings'
     | '/blogs/$id'
@@ -895,6 +894,7 @@ export interface FileRouteTypes {
     | '/admin/contact-us'
     | '/admin/courses'
     | '/admin/feedback'
+    | '/admin/payments'
     | '/admin/tags'
     | '/profile'
     | '/admin/blogs/edit/$id'
@@ -916,7 +916,6 @@ export interface FileRouteTypes {
     | '/'
     | '/admin/calender'
     | '/admin/dashboard'
-    | '/admin/inbox'
     | '/admin/search'
     | '/admin/settings'
     | '/blogs/$id'
@@ -937,6 +936,7 @@ export interface FileRouteTypes {
     | '/admin/contact-us'
     | '/admin/courses'
     | '/admin/feedback'
+    | '/admin/payments'
     | '/admin/tags'
     | '/profile'
     | '/admin/blogs/edit/$id'
@@ -961,7 +961,6 @@ export interface FileRouteTypes {
     | '/_layout/'
     | '/_admin/admin/calender'
     | '/_admin/admin/dashboard'
-    | '/_admin/admin/inbox'
     | '/_admin/admin/search'
     | '/_admin/admin/settings'
     | '/_layout/blogs/$id'
@@ -982,6 +981,7 @@ export interface FileRouteTypes {
     | '/_admin/admin/contact-us/'
     | '/_admin/admin/courses/'
     | '/_admin/admin/feedback/'
+    | '/_admin/admin/payments/'
     | '/_admin/admin/tags/'
     | '/_layout/_user/profile/'
     | '/_admin/admin/blogs/edit/$id'
@@ -1034,7 +1034,6 @@ export const routeTree = rootRoute
       "children": [
         "/_admin/admin/calender",
         "/_admin/admin/dashboard",
-        "/_admin/admin/inbox",
         "/_admin/admin/search",
         "/_admin/admin/settings",
         "/_admin/admin/",
@@ -1050,6 +1049,7 @@ export const routeTree = rootRoute
         "/_admin/admin/contact-us/",
         "/_admin/admin/courses/",
         "/_admin/admin/feedback/",
+        "/_admin/admin/payments/",
         "/_admin/admin/tags/",
         "/_admin/admin/blogs/edit/$id",
         "/_admin/admin/categories/edit/$id",
@@ -1132,10 +1132,6 @@ export const routeTree = rootRoute
       "filePath": "_admin/admin/dashboard.tsx",
       "parent": "/_admin"
     },
-    "/_admin/admin/inbox": {
-      "filePath": "_admin/admin/inbox.tsx",
-      "parent": "/_admin"
-    },
     "/_admin/admin/search": {
       "filePath": "_admin/admin/search.tsx",
       "parent": "/_admin"
@@ -1214,6 +1210,10 @@ export const routeTree = rootRoute
     },
     "/_admin/admin/feedback/": {
       "filePath": "_admin/admin/feedback/index.tsx",
+      "parent": "/_admin"
+    },
+    "/_admin/admin/payments/": {
+      "filePath": "_admin/admin/payments/index.tsx",
       "parent": "/_admin"
     },
     "/_admin/admin/tags/": {

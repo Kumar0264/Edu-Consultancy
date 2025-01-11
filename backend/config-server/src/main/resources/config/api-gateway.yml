@@ -5,32 +5,7 @@ eureka:
   client:
     serverUrl:
       defaultZone: http://localhost:8761/eureka/
-  instance:
-    hostname: 172.19.32.1
-    prefer-ip-address: true
-
 
 jwt:
   secret: ZWR1Y29uc3VsdGFuY3lzeXN0ZW0gaXMgYSBwcm9qZWN0IGkgYW0gYnVpbGRpbmcgYXMgYW4gaW50ZXJuIGF0IGluZm9zeXMgc3ByaW5nYm9hcmQ=
   expiration: 3600000
-
-
-spring:
-  cloud:
-    gateway:
-      globalcors:
-        cors-configurations:
-          '[/]': # Apply to all routes
-            allowedOrigins:
-              - "http://localhost:5173/"  # Replace with allowed origin(s)
-            allowedMethods:
-              - "GET"
-              - "POST"
-              - "PUT"
-              - "DELETE"
-              - "OPTIONS"
-            allowedHeaders:
-              - "*"
-            exposedHeaders:
-              - "Authorization"
-            allowCredentials: true

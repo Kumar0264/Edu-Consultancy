@@ -1,5 +1,5 @@
 server:
-  port: 8085
+  port: 8090
 
 eureka:
   client:
@@ -7,5 +7,5 @@ eureka:
       defaultZone: http://localhost:8761/eureka/
 
 resend:
-  key: re_fgWQ8DLw_28pKziHpKst9ybLdwqPjQc1W
+  key: re_hAzb1KjE_HkhKeGtoxBFms1fwMHdEHPmS
   from-email: onboarding@resend.dev

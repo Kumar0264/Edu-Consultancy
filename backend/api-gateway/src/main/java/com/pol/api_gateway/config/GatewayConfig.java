@@ -63,11 +63,15 @@ public class GatewayConfig {
                         .uri(ENGAGEMENT_SERVICE_LB))
 
                 // USER ROUTES FOR THE PAYMENTS SERVICE
+                .route("payment_service_admin_tags", r -> r.path("/admin/payments/**")
+                        .filters(f ->
+                                f.rewritePath("/admin/payments(?<segment>/?.*)", "/payment-service/admin/payments${segment}")
+                                        .filter(getJwtAuthorizationFilter(ADMIN_ONLY)))
+                        .uri(PAYMENT_SERVICE_LB))
                 .route("payment_service_tags", r -> r.path("/payments/**")
                         .filters(f -> f.rewritePath("/payments(?<segment>/?.*)", "/payment-service/payments${segment}")
                                 .filter(getJwtAuthorizationFilter(ALL_ROLES)))
                         .uri(PAYMENT_SERVICE_LB))
-
                 // ADMIN ROUTES FOR THE BLOG SERVICE
                 .route("blog_service_admin_blogs", r -> r.path("/admin/blogs/**")
                         .filters(f ->
@@ -106,7 +110,6 @@ public class GatewayConfig {
 
                 .build();
     }
-
 
     private static final List<String> ADMIN_ONLY = List.of("ADMIN");
     private static final List<String> STUDENT_ONLY = List.of("STUDENT");

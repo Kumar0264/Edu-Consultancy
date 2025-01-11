@@ -10,20 +10,36 @@ import {
   SidebarMenuButton, 
   SidebarMenuItem, 
   useSidebar } from "./ui/sidebar";
-  import { Home, Inbox, Search, Settings, LogOut,SquarePen,Tag,GraduationCap,Folder, MessageCircle, Phone,School2 } from "lucide-react";
-import { Link } from "@tanstack/react-router";
+  import {
+  LayoutDashboard,
+  Home,
+  CircleUserRound,
+  LogOut,
+  SquarePen,
+  Tag,
+  GraduationCap,
+  Folder,
+  MessageCircle,
+  Phone,
+  School2,
+    Wallet
+} from "lucide-react";
+import { Link,useNavigate } from "@tanstack/react-router";
 import { Button } from "./ui/button";
 import { useAuth } from "@/auth/authContext";
 
-
 const sidebarData = [
   {
-    label: "Contents",
+    label: "",
     items: [
-      { to: "/admin/dashboard", icon: Home, label: "Dashboard" },
-      { to: "/admin/inbox", icon: Inbox, label: "Inbox" },
-      { to: "/admin/search", icon: Search, label: "Search" },
-      { to: "/admin/settings", icon: Settings, label: "Settings" },
+      { to: "/admin/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+      { to: "/profile", icon: CircleUserRound, label: "Profile" },
+      { to: "/", icon: Home, label: "Home" },
+      {
+        to: "/admin/payments",
+        icon: Wallet,
+        label: "Payments",
+      }
     ],
   },
   {
@@ -115,7 +131,11 @@ export default function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild className="flex items-center hover:bg-gray-200 gap-3">
-              <Button onClick={logout} variant={'ghost'} className="p-5 text-gray-800 text-md border border-gray-300">
+              <Button onClick={()=>{
+                  logout()
+                  navigate({to:"/"});
+                  }
+              }variant={'ghost'} className="p-5 text-gray-800 text-md border border-gray-300">
                 <LogOut className="h-4 w-4"/>
                 {open?`Sign out`:""}
               </Button>
