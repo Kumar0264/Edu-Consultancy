@@ -24,7 +24,7 @@ import {
   School2,
     Wallet
 } from "lucide-react";
-import { Link,useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { Button } from "./ui/button";
 import { useAuth } from "@/auth/authContext";
 
